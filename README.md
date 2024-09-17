@@ -1,1 +1,1 @@
-# [loopHeroWalkingTest](https://cornchasm.github.io/loopHeroWalkingTest/)
+# [loopHeroWalkingTest](https://cornchasm.github.io/loopHeroWeb/)
