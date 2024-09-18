@@ -9,6 +9,7 @@ for (let index = 0; index < 252; index++) {
     mainBorder.children[index].dataset.column = `${(index%21)}`;
     mainBorder.children[index].dataset.tile = `${mainBorder.children[index].dataset.row}${mainBorder.children[index].dataset.column}`;
     document.querySelector(`[data-tile="${mainBorder.children[index].dataset.tile}"]`).style.backgroundColor = "yellow";
+    mainBorder.children[index].innerHTML = `${mainBorder.children[index].dataset.row}${mainBorder.children[index].dataset.column}`;
 
     document.querySelector(`[data-tile="${mainBorder.children[index].dataset.tile}"]`).onclick = () => {
     console.log(mainBorder.children[index].dataset.tile);
@@ -22,10 +23,10 @@ const w = "up";
 const a = "left";
 const s = "down";
 const d = "right";
-const movementArray = [d, d, d, d, s, d, d, d, s, s, a, a, s, a, a, s, a, a, w, a, w, w, w, w];
-
+const movementArray = [d, d, d, d, d, s, s, d, d, d, s, s, a, a, s, a, a, s, a, a, w, a, w, a, w, w, w, a];
+//const movementArray = [d, d, d, d, d, d, d, d, d, d, s, s, s, s, s, a, a, a, a, a, a, a, a, a, a, w, w, w, w,];
 let rowStart = 3;
-let columnStart = 5;
+let columnStart = 4;
 let roadTrail = `${rowArray[rowStart]}${columnStart}`;
 
 document
@@ -67,51 +68,45 @@ const setTileTypes = function (rowStart, columnStart){
       document.querySelector(`[data-tile="${rowArray[rowStart+1]}${columnStart+1}"]`).style.backgroundColor = "pink";
     }
 }
-
+console.log(movementArray.length)
 for (let i = 0; i < movementArray.length; i++) {
   document.querySelector(`[data-tile="${roadTrail}"]`).style.backgroundColor = "red";
   switch (movementArray[i]) {
     case s:
       document.querySelector(`[data-tile="${roadTrail}"]`).dataset.tileType = "road";
-
-      setTileTypes(rowStart, columnStart);
-
       document.querySelector(`[data-tile="${roadTrail}"]`).setAttribute("class", `road${i}`);
-
+      setTileTypes(rowStart, columnStart);
+      
       rowStart++;
       roadTrail = `${rowArray[rowStart]}${columnStart}`;
-      console.log(roadTrail);
+      console.log(roadTrail + "_" + i);
       break;
     case d:
       document.querySelector(`[data-tile="${roadTrail}"]`).dataset.tileType = "road";
-
-      setTileTypes(rowStart, columnStart);
-
       document.querySelector(`[data-tile="${roadTrail}"]`).setAttribute("class", `road${i}`);
+      setTileTypes(rowStart, columnStart);
 
       columnStart++;
       roadTrail = `${rowArray[rowStart]}${columnStart}`;
-      console.log(roadTrail);
+      console.log(roadTrail + "_" + i);
       break;
     case w:
       document.querySelector(`[data-tile="${roadTrail}"]`).dataset.tileType = "road";
-
-      setTileTypes(rowStart, columnStart); 
-
       document.querySelector(`[data-tile="${roadTrail}"]`).setAttribute("class", `road${i}`);
+      setTileTypes(rowStart, columnStart);
+
       rowStart--;
       roadTrail = `${rowArray[rowStart]}${columnStart}`;
-      console.log(roadTrail);
+      console.log(roadTrail + "_" + i);
       break;
     case a:
       document.querySelector(`[data-tile="${roadTrail}"]`).dataset.tileType = "road";
-
+      document.querySelector(`[data-tile="${roadTrail}"]`).setAttribute("class", `road${i}`);
       setTileTypes(rowStart, columnStart);
 
-      document.querySelector(`[data-tile="${roadTrail}"]`).setAttribute("class", `road${i}`);
       columnStart--;
       roadTrail = `${rowArray[rowStart]}${columnStart}`;
-      console.log(roadTrail);
+      console.log(roadTrail + "_" + i);
       break;
   }
 }
@@ -121,7 +116,7 @@ let iterationStopped = true;
 let maxPlayerPosition = movementArray.length;
 let child = document.getElementById("player");
 let parent = document.querySelector(`.road${playerPosition}`);
-const amogus = function () {
+const playerMovement = function () {
   if(iterationStopped == false){
   console.log(playerPosition + "test");
   iterationStopped = false;
@@ -144,18 +139,20 @@ const amogus = function () {
     .setAttribute("id", "player");
   }
 };
-onclick = () => {
-  switch (iterationStopped) {
-    case false:
-      console.log("Stopped");
-      clearInterval(walk);
-      iterationStopped = true;
-      break;
-    case true:
-      console.log("Started");
-      walk = setInterval(amogus, 200);
-      iterationStopped = false;
-      break;
+onkeydown = (event) => {
+  if(event.code == "Space"){
+    switch (iterationStopped) {
+      case false:
+        console.log("Stopped");
+        clearInterval(walk);
+        iterationStopped = true;
+        break;
+      case true:
+        console.log("Started");
+        walk = setInterval(playerMovement, 200);
+        iterationStopped = false;
+        break;
+    }
   }
 };
 
