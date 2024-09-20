@@ -13,8 +13,11 @@ for (let index = 0; index < 252; index++) {
 
     document.querySelector(`[data-tile="${mainBorder.children[index].dataset.tile}"]`).onclick = () => {
     console.log(mainBorder.children[index].dataset.tile);
+    // console.log(mainBorder.children[index].dataset.tileType);
+    // console.log(mainBorder.children[index].dataset.roadPlace);
     if (mainBorder.children[index].dataset.tileType != "road" && mainBorder.children[index].dataset.tileType != "rim"){
       document.querySelector(`[data-tile="${mainBorder.children[index].dataset.tile}"]`).style.backgroundColor = "blue";
+      
     }
   };
 }
@@ -23,33 +26,20 @@ const w = "up";
 const a = "left";
 const s = "down";
 const d = "right";
-const movementArray = [d, d, d, d, d, s, s, d, d, d, s, s, a, a, s, a, a, s, a, a, w, a, w, a, w, w, w, a];
-//const movementArray = [d, d, d, d, d, d, d, d, d, d, s, s, s, s, s, a, a, a, a, a, a, a, a, a, a, w, w, w, w,];
+//const movementArray = [d, d, d, d, d, s, s, d, d, d, s, s, a, a, s, a, a, s, a, a, w, a, w, a, w, w, w];
+const movementArray = [d, d, d, d, d, d, d, d, d, d, s, s, s, s, s, a, a, a, a, a, a, a, a, a, a, w, w, w, w];
 let rowStart = 3;
 let columnStart = 4;
 let roadTrail = `${rowArray[rowStart]}${columnStart}`;
-
 document
   .querySelector(`[data-tile="${roadTrail}"]`)
   .appendChild(document.createElement("div"))
   .setAttribute("id", "player");
 
 const setTileTypes = function (rowStart, columnStart){
-    if (document.querySelector(`[data-tile="${rowArray[rowStart-1]}${columnStart}"]`).dataset.tileType != "road"){
-        document.querySelector(`[data-tile="${rowArray[rowStart-1]}${columnStart}"]`).dataset.tileType = "rim";
-      document.querySelector(`[data-tile="${rowArray[rowStart-1]}${columnStart}"]`).style.backgroundColor = "pink";
-    }
-    if (document.querySelector(`[data-tile="${rowArray[rowStart+1]}${columnStart}"]`).dataset.tileType != "road"){
-        document.querySelector(`[data-tile="${rowArray[rowStart+1]}${columnStart}"]`).dataset.tileType = "rim";
-      document.querySelector(`[data-tile="${rowArray[rowStart+1]}${columnStart}"]`).style.backgroundColor = "pink";
-    }
     if (document.querySelector(`[data-tile="${rowArray[rowStart]}${columnStart-1}"]`).dataset.tileType != "road"){
         document.querySelector(`[data-tile="${rowArray[rowStart]}${columnStart-1}"]`).dataset.tileType = "rim";
       document.querySelector(`[data-tile="${rowArray[rowStart]}${columnStart-1}"]`).style.backgroundColor = "pink";
-    }
-    if (document.querySelector(`[data-tile="${rowArray[rowStart]}${columnStart+1}"]`).dataset.tileType != "road"){
-        document.querySelector(`[data-tile="${rowArray[rowStart]}${columnStart+1}"]`).dataset.tileType = "rim";
-      document.querySelector(`[data-tile="${rowArray[rowStart]}${columnStart+1}"]`).style.backgroundColor = "pink";
     }
     if (document.querySelector(`[data-tile="${rowArray[rowStart-1]}${columnStart-1}"]`).dataset.tileType != "road"){
         document.querySelector(`[data-tile="${rowArray[rowStart-1]}${columnStart-1}"]`).dataset.tileType = "rim";
@@ -68,54 +58,42 @@ const setTileTypes = function (rowStart, columnStart){
       document.querySelector(`[data-tile="${rowArray[rowStart+1]}${columnStart+1}"]`).style.backgroundColor = "pink";
     }
 }
-console.log(movementArray.length)
-for (let i = 0; i < movementArray.length; i++) {
+
+// console.log(movementArray.length)
+for (let i = 0; i < movementArray.length+1; i++) {
   document.querySelector(`[data-tile="${roadTrail}"]`).style.backgroundColor = "red";
+  document.querySelector(`[data-tile="${roadTrail}"]`).dataset.tileType = "road";
+  document.querySelector(`[data-tile="${roadTrail}"]`).setAttribute("class", `road${i}`);
+  document.querySelector(`[data-tile="${roadTrail}"]`).dataset.roadPlace = `${i}`;
+  console.log(roadTrail + "_" + document.querySelector(`[data-tile="${roadTrail}"]`).dataset.roadPlace);
+  setTileTypes(rowStart, columnStart);
   switch (movementArray[i]) {
     case s:
-      document.querySelector(`[data-tile="${roadTrail}"]`).dataset.tileType = "road";
-      document.querySelector(`[data-tile="${roadTrail}"]`).setAttribute("class", `road${i}`);
-      setTileTypes(rowStart, columnStart);
-      
       rowStart++;
       roadTrail = `${rowArray[rowStart]}${columnStart}`;
-      console.log(roadTrail + "_" + i);
       break;
     case d:
-      document.querySelector(`[data-tile="${roadTrail}"]`).dataset.tileType = "road";
-      document.querySelector(`[data-tile="${roadTrail}"]`).setAttribute("class", `road${i}`);
-      setTileTypes(rowStart, columnStart);
-
       columnStart++;
       roadTrail = `${rowArray[rowStart]}${columnStart}`;
-      console.log(roadTrail + "_" + i);
       break;
     case w:
-      document.querySelector(`[data-tile="${roadTrail}"]`).dataset.tileType = "road";
-      document.querySelector(`[data-tile="${roadTrail}"]`).setAttribute("class", `road${i}`);
-      setTileTypes(rowStart, columnStart);
-
       rowStart--;
       roadTrail = `${rowArray[rowStart]}${columnStart}`;
-      console.log(roadTrail + "_" + i);
       break;
     case a:
-      document.querySelector(`[data-tile="${roadTrail}"]`).dataset.tileType = "road";
-      document.querySelector(`[data-tile="${roadTrail}"]`).setAttribute("class", `road${i}`);
-      setTileTypes(rowStart, columnStart);
-
       columnStart--;
       roadTrail = `${rowArray[rowStart]}${columnStart}`;
-      console.log(roadTrail + "_" + i);
       break;
   }
 }
+
 let playerPosition = 0;
 let loopCount = 0;
 let iterationStopped = true;
-let maxPlayerPosition = movementArray.length;
+let maxPlayerPosition = movementArray.length+1;
 let child = document.getElementById("player");
 let parent = document.querySelector(`.road${playerPosition}`);
+
 const playerMovement = function () {
   if(iterationStopped == false){
   console.log(playerPosition + "test");
@@ -155,6 +133,28 @@ onkeydown = (event) => {
     }
   }
 };
+
+
+const buttons = document.querySelectorAll('[data-button="buttons"]')
+for (let i = 0; i < buttons.length; i++) {
+  buttons[i].onclick = () => {
+    switch(buttons[i].dataset.choice){
+      case "road":
+        console.log("road");
+        break;
+      case "rim":
+        console.log("rim");
+        break;
+      case "open":
+        console.log("open");
+        break;
+      case "cancel":
+        console.log("cancel");
+        break;
+    }
+  }
+  
+}
 
 
 
