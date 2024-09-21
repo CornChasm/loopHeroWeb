@@ -9,15 +9,30 @@ for (let index = 0; index < 252; index++) {
     mainBorder.children[index].dataset.column = `${(index%21)}`;
     mainBorder.children[index].dataset.tile = `${mainBorder.children[index].dataset.row}${mainBorder.children[index].dataset.column}`;
     document.querySelector(`[data-tile="${mainBorder.children[index].dataset.tile}"]`).style.backgroundColor = "yellow";
-    mainBorder.children[index].innerHTML = `${mainBorder.children[index].dataset.row}${mainBorder.children[index].dataset.column}`;
 
     document.querySelector(`[data-tile="${mainBorder.children[index].dataset.tile}"]`).onclick = () => {
     console.log(mainBorder.children[index].dataset.tile);
     // console.log(mainBorder.children[index].dataset.tileType);
     // console.log(mainBorder.children[index].dataset.roadPlace);
+    // TILE PLACING CODE
     if (mainBorder.children[index].dataset.tileType != "road" && mainBorder.children[index].dataset.tileType != "rim"){
       document.querySelector(`[data-tile="${mainBorder.children[index].dataset.tile}"]`).style.backgroundColor = "blue";
       
+    }
+    if(document.querySelector(`[data-tile="${mainBorder.children[index].dataset.tile}"]`).firstChild == undefined){
+      switch(chosenTileBuild){
+        case "forest":
+          appendTileBuild(index, "forest", "forest.png")
+          break;
+        case "mountain":
+          appendTileBuild(index, "mountain", "mountain.png");
+          break;
+        case "town":
+          appendTileBuild(index, "town", "town.png")
+          break;
+        case "none":
+          break;
+      }
     }
   };
 }
@@ -135,27 +150,38 @@ onkeydown = (event) => {
 };
 
 
-const buttons = document.querySelectorAll('[data-button="buttons"]')
+const buttons = document.querySelectorAll('[data-button="buttons"]');
+let chosenTileBuild = "none";
 for (let i = 0; i < buttons.length; i++) {
   buttons[i].onclick = () => {
     switch(buttons[i].dataset.choice){
-      case "road":
-        console.log("road");
+      case "forest":
+        console.log("forest");
+        chosenTileBuild = "forest";
         break;
-      case "rim":
-        console.log("rim");
+      case "mountain":
+        console.log("mountain");
+        chosenTileBuild = "mountain";
         break;
-      case "open":
-        console.log("open");
+      case "town":
+        console.log("town");
+        chosenTileBuild = "town";
         break;
       case "cancel":
         console.log("cancel");
+        chosenTileBuild = "none";
         break;
     }
   }
   
 }
 
+
+const appendTileBuild = function (index, tileBuild, src) {
+  document.querySelector(`[data-tile="${mainBorder.children[index].dataset.tile}"]`).appendChild(document.createElement("img"));
+  document.querySelector(`[data-tile="${mainBorder.children[index].dataset.tile}"]`).dataset.tileBuild = `${tileBuild}`;
+  document.querySelector(`[data-tile="${mainBorder.children[index].dataset.tile}"]`).firstChild.src = `./res/tiles/${src}`;
+}
 
 
 
