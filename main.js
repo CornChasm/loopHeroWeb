@@ -142,7 +142,7 @@ onkeydown = (event) => {
         break;
       case true:
         console.log("Started");
-        walk = setInterval(playerMovement, 200);
+        walk = setInterval(playerMovement, 500);
         iterationStopped = false;
         break;
     }
@@ -181,6 +181,7 @@ const appendTileBuild = function (index, tileBuild, src) {
   document.querySelector(`[data-tile="${mainBorder.children[index].dataset.tile}"]`).appendChild(document.createElement("img"));
   document.querySelector(`[data-tile="${mainBorder.children[index].dataset.tile}"]`).dataset.tileBuild = `${tileBuild}`;
   document.querySelector(`[data-tile="${mainBorder.children[index].dataset.tile}"]`).firstChild.src = `./res/tiles/${src}`;
+  console.log(rowArray.indexOf(document.querySelector(`[data-tile="${mainBorder.children[index].dataset.tile}"]`).dataset.row)*50+"px", document.querySelector(`[data-tile="${mainBorder.children[index].dataset.tile}"]`).dataset.column*50+"px")
 }
 
 
